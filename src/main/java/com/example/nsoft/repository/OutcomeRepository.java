@@ -6,4 +6,5 @@ import com.example.nsoft.model.Outcome;
 
 public interface OutcomeRepository extends JpaRepository<Outcome, String> {
 
+	
 }

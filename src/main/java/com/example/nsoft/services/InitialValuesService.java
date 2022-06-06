@@ -15,10 +15,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
 import com.example.nsoft.model.Event;
-import com.example.nsoft.model.EventMarket;
 import com.example.nsoft.model.Market;
-import com.example.nsoft.model.Outcome;
-import com.example.nsoft.util.Const;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,7 +33,7 @@ public class InitialValuesService implements ApplicationRunner{
 	MarketService marketService;
 	
 	@Autowired
-	OutcomeService outcomeService;
+	KafkaSender kafkaSender;
 	
 	private final static String  MARKETS_FILENAME_JSON = "markets.json";
 	private final static String  EVENTS_FILENAME_JSON = "events.json";
@@ -47,7 +44,6 @@ public class InitialValuesService implements ApplicationRunner{
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonMarkets = new String(Files.readAllBytes(Paths.get(jsonFolder + MARKETS_FILENAME_JSON)));
 			String jsonEvents = new String(Files.readAllBytes(Paths.get(jsonFolder + EVENTS_FILENAME_JSON)));
-		
 			
 			List<Market> markets = mapper.reader()
 				      .forType(new TypeReference<List<Market>>() {})
@@ -67,7 +63,8 @@ public class InitialValuesService implements ApplicationRunner{
 				eventService.saveEvent(event);
 			}
 			
-			
+			kafkaSender.sendEvent(jsonEvents);
+			kafkaSender.sendMarket(jsonMarkets);
 			
 		} catch (Exception e) {
 			System.out.println("ERROR=" + e.getMessage());

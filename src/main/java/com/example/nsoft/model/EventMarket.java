@@ -3,26 +3,32 @@ package com.example.nsoft.model;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+import com.example.nsoft.util.Const;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
+@Entity(name = "event_market")
+@Table(name = "event_market")
 public class EventMarket {
 
-	@Id()
+	@Id
+	@Column(name = "id", unique = true, nullable = false)
 	private String id;
+	@Column(name = "status")
 	private String status;	
 	
 	@ManyToOne
-    @JoinColumn(name = "eventId")
+    @JoinColumn(name = "eventId", referencedColumnName = "id")
     @JsonIgnore
 	private Event event;
 	
@@ -53,7 +59,7 @@ public class EventMarket {
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		this.status = Const.STATUS.get(status);
 	}
 
 	public Event getEvent() {

@@ -1,6 +1,7 @@
 package com.example.nsoft.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -8,21 +9,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.example.nsoft.util.Const;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name = "eventMarketOutcome")
+@Entity(name = "event_market_outcome")
+@Table(name = "event_market_outcome")
 public class EventMarketOutcome {
 	
 	@Id
+	@Column(name = "id", unique = true, nullable = false)
 	private String id;
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "outcomeId", referencedColumnName = "id")
 	@JsonIgnore
 	private Outcome outcome;
+	@Column(name = "status")
 	private String status;
+	@Column(name = "odds")
 	private Double odds;
 	
 	@ManyToOne
@@ -57,7 +62,7 @@ public class EventMarketOutcome {
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		this.status = Const.STATUS.get(status);
 	}
 
 	public Double getOdds() {

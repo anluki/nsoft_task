@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.nsoft.model.Event;
-import com.example.nsoft.model.Market;
 import com.example.nsoft.repository.EventRepository;
 
 @Service()

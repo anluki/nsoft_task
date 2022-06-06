@@ -5,23 +5,28 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.example.nsoft.util.Const;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import net.bytebuddy.asm.Advice.This;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
+@Entity(name = "event")
+@Table(name = "event")
 public class Event {
 
 	@Id
+	@Column(name = "id", unique = true, nullable = false)
 	private String id;
+	@Column(name = "name")
 	private String name;
+	@Column(name = "startsAt")
 	private Date startsAt;
+	@Column(name = "status")
 	private String status;	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<EventMarket> markets;
@@ -54,7 +59,7 @@ public class Event {
 		return  status;
 	}
 	public void setStatus(String status) {
-		this.status = Const.EVENT_STATUS.get(status);
+		this.status = Const.STATUS.get(status);
 	}
 	public List<EventMarket> getMarkets() {
 		return markets;

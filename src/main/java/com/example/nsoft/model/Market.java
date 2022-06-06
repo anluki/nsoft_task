@@ -2,24 +2,31 @@ package com.example.nsoft.model;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.example.nsoft.util.Const;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
+@Entity(name = "market")
+@Table(name = "market")
 public class Market {	
 	
 	@Id
+	@Column(name = "id", unique = true, nullable = false)
 	private String id;
+	@Column(name = "name")
 	private String name;
+	@Column(name = "status")
 	private String status;
 	@OneToMany(cascade = CascadeType.ALL)
+	@Column(name = "id_outcomes")
 	private List<Outcome> outcomes;
 	
 	@OneToOne(mappedBy = "market")
@@ -55,7 +62,7 @@ public class Market {
 	}
 
 	public void setStatus(String status) {
-		this.status = Const.MARKET_STATUS.get(status);
+		this.status = Const.STATUS.get(status);
 	}
 
 	public List<Outcome> getOutcomes() {

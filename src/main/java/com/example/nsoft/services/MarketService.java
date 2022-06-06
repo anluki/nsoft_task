@@ -1,6 +1,5 @@
 package com.example.nsoft.services;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.nsoft.model.Market;
-import com.example.nsoft.model.Outcome;
 import com.example.nsoft.repository.MarketRepositiry;
 import com.example.nsoft.repository.OutcomeRepository;
 import com.example.nsoft.util.Const;
@@ -27,26 +25,18 @@ public class MarketService {
 	@Autowired
 	KafkaSender kafkaSender;
 	public void saveMarket(Market market) {
-		List<Outcome> outcomes = market.getOutcomes();
-		marketRepositiry.save(market);
-		for (Iterator iterator = outcomes.iterator(); iterator.hasNext();) {
-			Outcome outcome = (Outcome) iterator.next();
-			outcome.setIdMarket(market.getId());	
-			outcomeRepository.save(outcome);
-		}
-		
+		marketRepositiry.save(market);		
 	}
 	
 	public Market getMarketById (String id) {
-		Market market = marketRepositiry.findById(id).get();
-		return market;
+		return marketRepositiry.findById(id).get();
 	}
 	
 	public void deleteAll () {
 		marketRepositiry.deleteAll();
 	}
 	
-	public List<Market> getAllActiveMarket () {
-		return marketRepositiry.findByStatus("1");
+	public List<Market> getAllActiveMarket (String status, String outcomeStatus) {
+		return marketRepositiry.findAllActiveMarkets(Const.STATUS.get(status), Const.STATUS.get(outcomeStatus));
 	}
 }
